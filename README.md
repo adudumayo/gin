@@ -11,3 +11,5 @@ My Crappy Text Editor
 
 
 - Remember, this is a crappy text editor. DO NOT HAVE HIGH HOPES! (Work In Progress)
+
+- Some flags I simply DO NOT know, so chances are you will encounter some interesting bugs! I can't disable flags I do not know.
