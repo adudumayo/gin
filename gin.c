@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <errno.h>
 
 struct termios orig_termios;
 
@@ -12,27 +13,32 @@ void die(const char *s) {
 }
 
 void disableRawMode() {
-  tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+  if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1) die("tcsetattr");
 }
 
 void enableRawMode() {
-  tcgetattr(STDIN_FILENO, &orig_termios);
+  if(tcgetattr(STDIN_FILENO, &orig_termios) == -1) die("tcgetattr");
   atexit(disableRawMode);
   struct termios raw = orig_termios;
   raw.c_iflag &= ~(ICRNL | IXON);
   raw.c_oflag &= ~(OPOST);
   raw.c_lflag &= ~(ECHO | ICANON | ISIG);
-  tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+  if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
 }
 
 int main() {
   enableRawMode();
-  char c;
-  while(read(STDIN_FILENO, &c, 1) == 1 && c != 'q') {
+
+  while(1) {
+    char c = '\0';
+    if(read(STDIN_FILENO, &c, 1) == -1) die("read stage");
     if (iscntrl(c)) {
       printf("%d\r\n", c);
     } else {
       printf("%d (' %c ')\r\n", c, c);
+    }
+    if(c == 'q') {
+      exit(1);
     }
   }
   return 0;
