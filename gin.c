@@ -40,6 +40,16 @@ char editorReadKey() {
   return c;
 } // read keys from the editor 
 
+void editorProcessKey() {
+  char c = editorReadKey();
+
+  switch (c) {
+    case CTRL_KEY('q'):
+      exit(0);
+      break;
+  }
+} // Main logic of what happens when a certain key is pressed
+
 int main() {
   enableRawMode();
 
