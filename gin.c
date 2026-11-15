@@ -12,6 +12,8 @@
 
 // DATA SEGMENT
 struct editorConfig {
+  int screenrows;
+  int screencols;
   struct termios orig_termios;
 };
 
@@ -92,8 +94,13 @@ void editorProcessKeypress() {
 } // Main logic of what happens when a certain key is pressed
 
 // INIT
+void initEditor() {
+  if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
+}
+
 int main() {
   enableRawMode(); 
+  initEditor();
 
   while(1) {
     editorRefreshScreen();
