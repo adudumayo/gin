@@ -54,7 +54,7 @@ void editorDrawRows() {
   for(y = 0; y <= 10; y++) {
     write(STDIN_FILENO, "~\r\n", 3);
   }
-}
+} // Draw tildes for lines or rows
 
 void editorRefreshScreen() {
   write(STDIN_FILENO, "\x1b[2J", 4);
