@@ -62,7 +62,7 @@ void editorRefreshScreen() {
 
   editorDrawRows();
   write(STDIN_FILENO, "\x1b[H", 3);
-}
+} // Clear the whole screen and reposition the cursor at the top left
 
 // INPUT
 void editorProcessKeypress() {
