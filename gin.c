@@ -12,11 +12,11 @@ struct termios orig_termios;
 void die(const char *s) {
   perror(s);
   exit(1);
-}
+} // Kill the program on error
 
 void disableRawMode() {
   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1) die("tcsetattr");
-}
+} // Set the terminal back to original attribute values
 
 void enableRawMode() {
   if(tcgetattr(STDIN_FILENO, &orig_termios) == -1) die("tcgetattr");
@@ -28,7 +28,7 @@ void enableRawMode() {
   raw.c_lflag &= ~(ECHO | ICANON | ISIG);
 
   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
-}
+} // Disable some terminal attributes to build raw mode.
 
 char editorReadKey() {
   int nread;
