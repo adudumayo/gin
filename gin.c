@@ -54,6 +54,13 @@ void editorRefreshScreen() {
   write(STDIN_FILENO, "\x1b[H", 3);
 }
 
+void editorDrawRows() {
+  int y;
+  for(y = 0; y <= 10; y++) {
+    write(STDIN_FILENO, "~\r\n", 3);
+  }
+}
+
 // INPUT
 void editorProcessKeypress() {
   char c = editorReadKey();
