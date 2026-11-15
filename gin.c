@@ -18,11 +18,13 @@ void disableRawMode() {
 
 void enableRawMode() {
   if(tcgetattr(STDIN_FILENO, &orig_termios) == -1) die("tcgetattr");
+
   atexit(disableRawMode);
   struct termios raw = orig_termios;
   raw.c_iflag &= ~(ICRNL | IXON);
   raw.c_oflag &= ~(OPOST);
   raw.c_lflag &= ~(ECHO | ICANON | ISIG);
+
   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
 }
 
@@ -31,15 +33,16 @@ int main() {
 
   while(1) {
     char c = '\0';
+
     if(read(STDIN_FILENO, &c, 1) == -1) die("read stage");
+
     if (iscntrl(c)) {
       printf("%d\r\n", c);
     } else {
       printf("%d (' %c ')\r\n", c, c);
     }
-    if(c == 'q') {
-      exit(1);
-    }
+
+    if (c == 'q') exit(1);
   }
   return 0;
 }
