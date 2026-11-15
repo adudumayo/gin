@@ -26,6 +26,8 @@ void enableRawMode() {
   raw.c_iflag &= ~(ICRNL | IXON);
   raw.c_oflag &= ~(OPOST);
   raw.c_lflag &= ~(ECHO | ICANON | ISIG);
+  raw.c_cc[VMIN] = 0;
+  raw.c_cc[VTIME] = 1;
 
   if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
 } // Disable some terminal attributes to build raw mode.
@@ -40,7 +42,7 @@ char editorReadKey() {
   return c;
 } // read keys from the editor 
 
-void editorProcessKey() {
+void editorProcessKeypress() {
   char c = editorReadKey();
 
   switch (c) {
@@ -51,20 +53,9 @@ void editorProcessKey() {
 } // Main logic of what happens when a certain key is pressed
 
 int main() {
-  enableRawMode();
+  enableRawMode(); 
 
   while(1) {
-    char c = '\0';
-
-    if(read(STDIN_FILENO, &c, 1) == -1) die("read stage");
-
-    if (iscntrl(c)) {
-      printf("%d  %zu Bytes\r\n", c, sizeof(c));
-    } else {
-      printf("%d (' %c ')  %zu Bytes\r\n", c, c, sizeof(c));
-    }
-
-    if (c == CTRL_KEY('q')) break;
+    editorProcessKeypress();
   }
-  return 0;
 }
