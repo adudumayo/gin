@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#define CTRL_KEY(k) ((k) & 0x1f)
+
 struct termios orig_termios;
 
 void die(const char *s) {
@@ -37,12 +39,12 @@ int main() {
     if(read(STDIN_FILENO, &c, 1) == -1) die("read stage");
 
     if (iscntrl(c)) {
-      printf("%d\r\n", c);
+      printf("%d  %zu Bytes\r\n", c, sizeof(c));
     } else {
-      printf("%d (' %c ')\r\n", c, c);
+      printf("%d (' %c ')  %zu Bytes\r\n", c, c, sizeof(c));
     }
 
-    if (c == 'q') exit(1);
+    if (c == CTRL_KEY('q')) break;
   }
   return 0;
 }
