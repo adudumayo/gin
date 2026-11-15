@@ -14,6 +14,8 @@ struct termios orig_termios;
 
 // TERMINAL
 void die(const char *s) {
+  write(STDIN_FILENO, "\x1b[2J", 4);
+  write(STDIN_FILENO, "\x1b[H", 3);
   perror(s);
   exit(1);
 } // Kill the program on error
@@ -58,6 +60,8 @@ void editorProcessKeypress() {
 
   switch (c) {
     case CTRL_KEY('q'):
+      write(STDIN_FILENO, "\x1b[2J", 4);
+      write(STDIN_FILENO, "\x1b[H", 3);
       exit(0);
       break;
   }
