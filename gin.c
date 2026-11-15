@@ -5,6 +5,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/ioctl.h>
 
 // DEFINES
 #define CTRL_KEY(k) ((k) & 0x1f)
@@ -51,6 +52,15 @@ char editorReadKey() {
   }
   return c;
 } // read keys from the editor 
+
+int getWindowSize(int *rows, int *cols) {
+  struct winsize ws;
+
+  if(ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) == 1 || ws.ws_col == 0) return -1;
+  *cols = ws.ws_col;
+  *rows = ws.ws_row;
+  return 0;
+} // Get the size of the terminal
 
 // OUTPUT
 void editorDrawRows() {
