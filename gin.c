@@ -1,3 +1,4 @@
+// INCLUDES
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,10 +6,13 @@
 #include <unistd.h>
 #include <errno.h>
 
+// DEFINES
 #define CTRL_KEY(k) ((k) & 0x1f)
 
+// DATA SEGMENT
 struct termios orig_termios;
 
+// TERMINAL
 void die(const char *s) {
   perror(s);
   exit(1);
@@ -42,6 +46,7 @@ char editorReadKey() {
   return c;
 } // read keys from the editor 
 
+// INPUT
 void editorProcessKeypress() {
   char c = editorReadKey();
 
@@ -52,6 +57,7 @@ void editorProcessKeypress() {
   }
 } // Main logic of what happens when a certain key is pressed
 
+// INIT
 int main() {
   enableRawMode(); 
 
