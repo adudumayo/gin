@@ -67,7 +67,7 @@ int getWindowSize(int *rows, int *cols) {
 // OUTPUT
 void editorDrawRows() {
   int y;
-  for(y = 0; y <= 10; y++) {
+  for(y = 0; y < E.screenrows; y++) {
     write(STDIN_FILENO, "~\r\n", 3);
   }
 } // Draw tildes for lines or rows
